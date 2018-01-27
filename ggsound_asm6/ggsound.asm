@@ -1441,7 +1441,7 @@ play_song:
 
     ;Load square 1 stream.
     ldx #0
-    jsr stream_stop
+    jsr stream_stop;Doesn't change X
 
     ldy #track_header_square1_stream_address
     lda (song_address),y
@@ -1451,11 +1451,8 @@ play_song:
     beq @no_square_1
     sta sound_param_word_0+1
 
-    lda #0
-    sta sound_param_byte_0
-
-    lda #0
-    sta sound_param_byte_1
+    stx sound_param_byte_0
+    stx sound_param_byte_1
 
     jsr stream_initialize
 
@@ -1475,7 +1472,7 @@ play_song:
 
     ;Load square 2 stream.
     ldx #1
-    jsr stream_stop
+    jsr stream_stop;Doesn't change X
 
     ldy #track_header_square2_stream_address
     lda (song_address),y
@@ -1485,11 +1482,8 @@ play_song:
     beq @no_square_2
     sta sound_param_word_0+1
 
-    lda #1
-    sta sound_param_byte_0
-
-    lda #1
-    sta sound_param_byte_1
+    stx sound_param_byte_0
+    stx sound_param_byte_1
 
     jsr stream_initialize
 
@@ -1509,7 +1503,7 @@ play_song:
 
     ;Load triangle stream.
     ldx #2
-    jsr stream_stop
+    jsr stream_stop;Doesn't Change X
 
     ldy #track_header_triangle_stream_address
     lda (song_address),y
@@ -1519,9 +1513,8 @@ play_song:
     beq @no_triangle
     sta sound_param_word_0+1
 
-    lda #2
-    sta sound_param_byte_0
-    sta sound_param_byte_1
+    stx sound_param_byte_0
+    stx sound_param_byte_1
 
     jsr stream_initialize
 
@@ -1541,7 +1534,7 @@ play_song:
 
     ;Load noise stream.
     ldx #3
-    jsr stream_stop
+    jsr stream_stop;Doesn't change X
 
     ldy #track_header_noise_stream_address
     lda (song_address),y
@@ -1551,9 +1544,8 @@ play_song:
     beq @no_noise
     sta sound_param_word_0+1
 
-    lda #3
-    sta sound_param_byte_0
-    sta sound_param_byte_1
+    stx sound_param_byte_0
+    stx sound_param_byte_1
 
     jsr stream_initialize
 
@@ -1574,7 +1566,7 @@ play_song:
     ifdef FEATURE_DPCM
     ;Load dpcm stream.
     ldx #4
-    jsr stream_stop
+    jsr stream_stop;Doesn't change X
 
     ldy #track_header_dpcm_stream_address
     lda (song_address),y
@@ -1584,9 +1576,8 @@ play_song:
     beq @no_dpcm
     sta sound_param_word_0+1
 
-    lda #4
-    sta sound_param_byte_0
-    sta sound_param_byte_1
+    stx sound_param_byte_0
+    stx sound_param_byte_1
 
     jsr stream_initialize
 
@@ -1968,6 +1959,7 @@ starting_read_address = sound_param_word_0
 
 ;Stops a stream from playing.
 ;Assumes x contains the index of the stream to kill.
+;Things rely on this not changing X
 stream_stop:
 
     inc sound_disable_update
